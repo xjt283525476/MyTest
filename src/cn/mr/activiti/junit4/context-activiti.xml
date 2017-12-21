@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="activitiDataSource"
+		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<!-- <property name="databaseType" value="oracle"></property> -->
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+	     <property name="url" value="jdbc:oracle:thin:@192.168.1.231:1521:orcl" />
+		<property name="username" value="ams20140102" />
+		<property name="password" value="ams20140102" />
+	</bean>
+
+	<bean id="jtaTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="activitiDataSource" />
+	</bean>
+
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="databaseSchemaUpdate" value="update" />
+		<property name="databaseType" value="oracle" />
+		<property name="dataSource" ref="activitiDataSource" />
+		<property name="transactionManager" ref="jtaTransactionManager" />
+		<property name="jobExecutorActivate" value="true" />
+		<!-- 
+			<property name="deploymentResources" value="/WEB-INF/workflow/autodeploy.*.bpmn20.xml" />
+		-->
+	</bean>
+
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" lazy-init="true" />
+
+	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" lazy-init="true" />
+
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" lazy-init="true" />
+
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" lazy-init="true" />
+
+	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" lazy-init="true" />
+
+	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" lazy-init="true" />
+
+	<bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
+		<property name="processEngine" ref="processEngine" />
+	</bean>
+	
+</beans>

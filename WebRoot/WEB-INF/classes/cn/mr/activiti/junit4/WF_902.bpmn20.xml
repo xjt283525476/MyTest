@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions id="definitions" xmlns:activiti="http://activiti.org/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="cn.mr.common.model.workflow.Workflow">
+  <!--workflow BPMN20 XML FILE-->
+  <process id="PROCESS_902" name="一派多简单流程">
+    <startEvent id="THESTART"/>
+    <sequenceFlow id="FLOW_-1" sourceRef="THESTART" targetRef="TASK_1707"/>
+    <userTask id="TASK_1707" name="xjt-始发">
+	  <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>WFCOMHANDLER_2449</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <sequenceFlow id="FLOW_1707" sourceRef="TASK_1707" targetRef="TASK_1708"/>
+    <userTask id="TASK_1708" name="xjt-普通3">
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>WFCOMHANDLER_2450</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <sequenceFlow id="FLOW_1708" sourceRef="TASK_1708" targetRef="EXCLUSIVEGATEWAY_1708"/>
+    <exclusiveGateway id="EXCLUSIVEGATEWAY_1708"/>
+    <sequenceFlow id="EXCLUSIVEGATEWAYSEQUENCEFLOW_1708_1707" sourceRef="EXCLUSIVEGATEWAY_1708" targetRef="TASK_1707">
+      <conditionExpression><![CDATA[${NEXTWFSTEPID == 1707}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="EXCLUSIVEGATEWAYSEQUENCEFLOW_1708_1709" sourceRef="EXCLUSIVEGATEWAY_1708" targetRef="SUBPROCESS_1708">
+      <conditionExpression><![CDATA[${NEXTWFSTEPID == 1709}]]></conditionExpression>
+    </sequenceFlow>
+    <subProcess id="SUBPROCESS_1708" name="xjt-普通3">
+      <multiInstanceLoopCharacteristics>
+        <loopCardinality>${SUBPROCESS_LOOPCARDINALITY_1708}</loopCardinality>
+      </multiInstanceLoopCharacteristics>
+      <startEvent id="THESUBPROCESSSTART_1708"/>
+      <endEvent id="THESUBPROCESSEND_1708"/>
+      <sequenceFlow id="FLOW_SUBPROCESS_1708" sourceRef="THESUBPROCESSSTART_1708" targetRef="TASK_1709"/>
+      <userTask id="TASK_1709" name="xjt-结束1">
+        <potentialOwner>
+          <resourceAssignmentExpression>
+            <formalExpression>WFCOMHANDLER_2451</formalExpression>
+          </resourceAssignmentExpression>
+        </potentialOwner>
+      </userTask>
+      <sequenceFlow id="FLOW_1709" sourceRef="TASK_1709" targetRef="THESUBPROCESSEND_1708"/>
+    </subProcess>
+    <sequenceFlow id="FLOW_SUBPROCESS_TOEND_1708" sourceRef="SUBPROCESS_1708" targetRef="THEEND"/>
+    <endEvent id="THEEND"/>
+  </process>
+</definitions>

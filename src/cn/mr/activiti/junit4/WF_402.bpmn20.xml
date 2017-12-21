@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions id="definitions" xmlns:activiti="http://activiti.org/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="cn.mr.common.model.workflow.Workflow">
+  <!--workflow BPMN20 XML FILE-->
+  <process id="PROCESS_121212121" name="发电保障工单">
+    <startEvent id="THESTART"/>
+    <sequenceFlow id="FLOW_-1" sourceRef="THESTART" targetRef="TASK_483"/>
+    <userTask id="TASK_483" name="苏州发电保障工单始发环节">
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>WFCOMHANDLER_666</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <sequenceFlow id="FLOW_483" sourceRef="TASK_483" targetRef="subProcess"/>
+	<subProcess id="subProcess"> 
+		<multiInstanceLoopCharacteristics isSequential="false"> 
+		  <loopCardinality>${n}</loopCardinality> 
+		</multiInstanceLoopCharacteristics>
+		<startEvent id="subProcessStart"/> 
+		<sequenceFlow id="FLOW_0" sourceRef="subProcessStart" targetRef="TASK_484"/>
+		<userTask id="TASK_484" name="苏州发电保障工单普通环节">
+		  <potentialOwner>
+			<resourceAssignmentExpression>
+			  <formalExpression>WFCOMHANDLER_667</formalExpression>
+			</resourceAssignmentExpression>
+		  </potentialOwner>
+		</userTask>
+		<sequenceFlow id="FLOW_484" sourceRef="TASK_484" targetRef="TASK_485"/>
+		<userTask id="TASK_485" name="苏州发电保障工单结束环节">
+		  <potentialOwner>
+			<resourceAssignmentExpression>
+			  <formalExpression>WFCOMHANDLER_668</formalExpression>
+			</resourceAssignmentExpression>
+		  </potentialOwner>
+		</userTask>
+		<sequenceFlow id="FLOW_485" sourceRef="TASK_485" targetRef="subProcessEnd"/>
+		<endEvent id="subProcessEnd"/> 
+	</subProcess>
+    <sequenceFlow id="FLOW_--1" sourceRef="subProcess" targetRef="THEEND"/>
+    <endEvent id="THEEND"/>
+  </process>
+</definitions>
